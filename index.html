@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Website/Email Checker</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('form').submit(function(event) {
+        event.preventDefault();
+        const input = $('#inputField').val();
+
+        $.ajax({
+          url: '/check',
+          method: 'POST',
+          data: JSON.stringify({ input }),
+          contentType: 'application/json',
+          success: function(response) {
+            $('#result').html(`<p>Type: ${response.type}</p><p>Input: ${response.input}</p><img src="${response.imageUrl || response.logoUrl}" alt="Image">`);
+          },
+          error: function(error) {
+            console.log(error);
+            $('#result').html('<p>Error occurred</p>');
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Enter your Email</h1>
+  <form>
+    <input type="text" id="inputField" placeholder="Enter an email or website domain" required>
+    <button type="submit">Check</button>
+  </form>
+  <div id="result"></div>
+</body>
+</html>
